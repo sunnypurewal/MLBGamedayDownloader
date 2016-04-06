@@ -9,4 +9,4 @@ The Downloader takes two parameters, the first is the year that you wish to down
 
 Example:
 
-java -jar Downloader 2014 "c:\Users\me\pitchfx"
+java -jar Downloader.jar 2014 "c:\Users\me\pitchfx"
