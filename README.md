@@ -10,3 +10,5 @@ The Downloader takes two parameters, the first is the year that you wish to down
 Example:
 
 java -jar Downloader.jar 2014 "c:\Users\me\pitchfx"
+
+NOTE: Downloading an entire year of data took about 30 minutes for me, running on an SSD with a good internet connection.
