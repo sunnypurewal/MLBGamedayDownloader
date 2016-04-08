@@ -1,5 +1,5 @@
-# PitchFXDownloader
-A tool to download Pitch F/X data from mlb.com. Written in Java.
+# MLB Gameday Downloader
+A tool to download MLB Gameday data written in Java.
 
 http://gd2.mlb.com/components/game/mlb/ <-- fetched from here
 
