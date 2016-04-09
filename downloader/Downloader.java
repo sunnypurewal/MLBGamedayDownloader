@@ -66,7 +66,7 @@ public class Downloader {
 		}
 	}
 
-	Semaphore s = new Semaphore(48);
+	Semaphore s = new Semaphore(8);
 	public void download(int year, int month) {
 		try {
 			ExecutorService executor = Executors.newCachedThreadPool();
