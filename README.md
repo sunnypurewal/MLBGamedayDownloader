@@ -11,4 +11,4 @@ Example:
 
 java -jar Downloader.jar 2014 "c:\Users\me\pitchfx"
 
-NOTE: Downloading an entire year of data took about 30 minutes for me, running on an SSD with a good internet connection.
+NOTE: The tool is multithreaded, and will download an entire season in about 5 minutes. There's a chance that mlb.com will frown upon the speed of HTTP requests made and throttle/block your IP address, but this has not happened to me yet.
