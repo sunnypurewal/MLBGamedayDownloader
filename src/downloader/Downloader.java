@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.FileUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.select.Elements;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Document;
@@ -21,6 +22,8 @@ public class Downloader {
 	static String baseURL = "http://gd2.mlb.com/components/game/mlb";
 	static String baseLocalURL;
 	static ArrayList<String> files = new ArrayList<String>();
+	static int maxThreads = 8;
+	Semaphore s;
 	
 	private static void print(String s) {
 		System.out.println(s);
@@ -29,11 +32,7 @@ public class Downloader {
 	public static void main(String[] args) {
 		Downloader downloader = new Downloader();
 		int year;
-		if (args.length == 0) {
-			baseLocalURL = "C:\\Users\\sunny\\Documents\\saber\\data";
-			year = 2007;
-		}
-		else if (args.length < 2) {
+		if (args.length < 2) {
 			print("Invalid number of arguments");
 			return;
 		}
@@ -55,16 +54,23 @@ public class Downloader {
 			files.add("inning_hit.xml");
 			files.add("inning_Scores.xml");
 		}
+		if (args.length > 0) {
+			String lastArg = args[args.length-1];
+			if (StringUtil.isNumeric(lastArg)) {
+				maxThreads = Integer.parseInt(lastArg);
+			}	
+		}
 		downloader.download(year);
 	}
 	
 	public void download(int year) {
+		print("Starting with "+maxThreads+" threads");
+		s = new Semaphore(80);
 		for(int month = 4 ; month <= 11 ; month++) {
 			download(year, month);
 		}
 	}
 
-	Semaphore s = new Semaphore(8);
 	public void download(int year, int month) {
 		try {
 			ExecutorService executor = Executors.newCachedThreadPool();
