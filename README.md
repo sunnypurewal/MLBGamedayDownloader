@@ -1,5 +1,5 @@
 # MLB Gameday Downloader
-A tool to download MLB Gameday data written in Java.
+A tool to download MLB Gameday data written in Java. ONLY WORKS ON WINDOWS.
 
 http://gd2.mlb.com/components/game/mlb/ <-- fetched from here
 
