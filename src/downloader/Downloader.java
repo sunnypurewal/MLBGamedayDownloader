@@ -32,9 +32,14 @@ public class Downloader {
 	public static void main(String[] args) {
 		Downloader downloader = new Downloader();
 		int year;
-		if (args.length < 2) {
+		if (args.length == 0) {
 			print("Invalid number of arguments");
 			return;
+		}
+		else if (args.length == 1) {
+			year = Integer.parseInt(args[0]);
+			baseLocalURL = System.getProperty("user.dir")+"\\out";
+			print("No output directory specified, using " + baseLocalURL);
 		}
 		else {
 
