@@ -3,19 +3,22 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
+import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.helper.StringUtil;
-import org.jsoup.select.Elements;
-import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class Downloader {
 	
@@ -33,18 +36,20 @@ public class Downloader {
 		Downloader downloader = new Downloader();
 		int year;
 		if (args.length == 0) {
-			print("Invalid number of arguments");
-			return;
+			year = Calendar.getInstance().get(Calendar.YEAR); 
+			baseLocalURL = getOSPath(System.getProperty("user.dir")+"\\out");
+			print("No year specified, using " + year);
+			print("No directory specified, output can be found at:\n" + baseLocalURL);
 		}
 		else if (args.length == 1) {
 			year = Integer.parseInt(args[0]);
-			baseLocalURL = System.getProperty("user.dir")+"\\out";
-			print("No output directory specified, using " + baseLocalURL);
+			baseLocalURL = getOSPath(System.getProperty("user.dir")+"\\out");
+			print("No directory specified, output can be found at:\n" + baseLocalURL);
 		}
 		else {
-
 			year = Integer.parseInt(args[0]);
 			baseLocalURL = args[1];
+			print("Output can be found at:\n" + baseLocalURL);
 		}
 		if (args.length > 2) {
 			for (int i = 2; i < args.length; i++) {
@@ -120,9 +125,8 @@ public class Downloader {
 							u = new URL(String.format("%s/%s", directory, filename));
 						}
 
-						File file = new File(String.format("%s\\%s",baseLocalURL, u.getFile()));
+						File file = new File(getOSPath(String.format("%s\\%s",baseLocalURL, u.getFile())));
 						if (file.exists()) {
-							print(filename + " has already been downloaded");
 							continue;
 						}
 						s.acquire();
@@ -149,16 +153,14 @@ public class Downloader {
 		public String call() {
 			try {
 				FileUtils.copyURLToFile(url, file, 5000, 5000);
-				print(String.format("Downloaded to %s", file.getAbsolutePath()));
 			} catch (IOException e) {
 				if (file.getName().equalsIgnoreCase("game_events.json") || file.getName().equalsIgnoreCase("boxscore.json")) {
 					URL u = null;
 					try {
 						u = new URL("http://"+url.getHost()+url.getPath().replace("json", "xml"));
-						File f = new File(String.format("%s\\%s",baseLocalURL, u.getFile()));
+						File f = new File(getOSPath(String.format("%s\\%s",baseLocalURL, u.getFile())));
 						FileUtils.copyURLToFile(u, f, 5000, 5000);
 					} catch (IOException e1) {
-						print(u.getPath() + " does not exist on server ");
 						s.release();
 						return null;
 					}
@@ -173,7 +175,7 @@ public class Downloader {
 							if (c.execute().statusCode() == 200) {
 								i++;
 								URL u = new URL(sURL);
-								File f = new File(baseLocalURL + "\\" + u.getFile());
+								File f = new File(getOSPath(baseLocalURL + "\\" + u.getFile()));
 								FileUtils.copyURLToFile(u, f, 5000, 5000);
 							}
 							else {
@@ -190,7 +192,6 @@ public class Downloader {
 					
 				}
 				else {
-					print(url.getPath() + " does not exist on server");
 				}
 				s.release();
 				return null;
@@ -198,5 +199,10 @@ public class Downloader {
 			s.release();
 			return file.getAbsolutePath();
 		}
+	}
+	
+	private static String getOSPath(String path) {
+		if (SystemUtils.IS_OS_MAC) return path.replaceAll("\\", "/");
+		else return path;
 	}
 }

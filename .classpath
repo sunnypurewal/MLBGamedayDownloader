@@ -4,5 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="C:/Users/sunny/Documents/PitchFX/Downloader/lib/commons-io-2.4.jar"/>
 	<classpathentry kind="lib" path="C:/Users/sunny/Documents/PitchFX/Downloader/lib/jsoup-1.8.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/sunny/Documents/PitchFX/Downloader/lib/commons-lang3-3.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
