@@ -75,7 +75,7 @@ public class Downloader {
 	
 	public void download(int year) {
 		print("Starting with "+maxThreads+" threads");
-		s = new Semaphore(80);
+		s = new Semaphore(maxThreads);
 		for(int month = 4 ; month <= 11 ; month++) {
 			download(year, month);
 		}
